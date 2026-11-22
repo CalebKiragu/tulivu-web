@@ -1,0 +1,23 @@
+version: 1
+env:
+  variables:
+    VITE_API_BASE_URL: https://api.tulivu.app
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm install --global --prefix /tmp/tulivu-pnpm pnpm@10.18.0
+        - /tmp/tulivu-pnpm/bin/pnpm config set store-dir .pnpm-store
+        - /tmp/tulivu-pnpm/bin/pnpm install --frozen-lockfile --prod=false --prefer-offline
+    build:
+      commands:
+        - PATH="/tmp/tulivu-pnpm/bin:$PATH" VITE_API_BASE_URL="${VITE_API_BASE_URL:-https://api.tulivu.app}" /tmp/tulivu-pnpm/bin/pnpm build
+  artifacts:
+    baseDirectory: dist/client
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - packages/*/node_modules/**/*
+      - .pnpm-store/**/*
