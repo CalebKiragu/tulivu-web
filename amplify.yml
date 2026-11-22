@@ -1,7 +1,4 @@
 version: 1
-env:
-  variables:
-    VITE_API_BASE_URL: https://api.tulivu.app
 frontend:
   phases:
     preBuild:
@@ -11,6 +8,8 @@ frontend:
         - /tmp/tulivu-pnpm/bin/pnpm install --frozen-lockfile --prod=false --prefer-offline
     build:
       commands:
+        # Set VITE_API_BASE_URL per Amplify branch/environment in the console.
+        # main/prod: https://api.tulivu.app | dev: https://dev-api.tulivu.app
         - PATH="/tmp/tulivu-pnpm/bin:$PATH" VITE_API_BASE_URL="${VITE_API_BASE_URL:-https://api.tulivu.app}" /tmp/tulivu-pnpm/bin/pnpm build
   artifacts:
     baseDirectory: dist/client
