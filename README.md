@@ -12,6 +12,7 @@ Tulivu frontend SPA (React + Vite + Tailwind), deployed as a static site (AWS Am
 
 ## Dev
 ```bash
+git submodule update --init --recursive
 pnpm install
 cp .env.development.example .env.local # or set VITE_API_BASE_URL
 pnpm dev
@@ -25,8 +26,13 @@ pnpm build
 Build output: `dist/client` (matches `amplify.yml`).
 
 ## Shared packages
-`packages/shared` and `packages/ad-platforms` are currently vendored copies from the monorepo split.
-Target state (Decision #3): consume `tulivu-packages` via git submodule (pinned ref) or versioned package. Replace vendored copies once wiring is finalized.
+`packages/` is a git submodule pointing to [`tulivu-packages`](https://github.com/CalebKiragu/tulivu-packages.git) (`shared`, `ad-platforms`). Pin updates by advancing the submodule ref in a PR.
+
+```bash
+git submodule update --init --recursive
+# to update shared packages:
+cd packages && git checkout main && git pull && cd .. && git add packages
+```
 
 ## Deploy (Amplify)
 - Build spec: `amplify.yml`.
